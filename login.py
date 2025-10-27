@@ -47,8 +47,8 @@ class LoginWindow(ctk.CTk):
         ctk.CTkButton(self.signup_tab, text="Sign Up", command=self.handle_signup).pack(pady=12)
 
         # Mode switch
-        self.mode_switch = ctk.CTkSwitch(container, text="Dark Mode", command=self.toggle_mode)
-        self.mode_switch.pack(pady=(10, 0))
+        # self.mode_switch = ctk.CTkSwitch(container, text="Dark Mode", command=self.toggle_mode)
+        # self.mode_switch.pack(pady=(10, 0))
 
     def toggle_mode(self):
         mode = "dark" if self.mode_switch.get() else "light"
@@ -56,18 +56,18 @@ class LoginWindow(ctk.CTk):
 
     def handle_signup(self):
         user = self.su_user.get().strip()
-        p1 = self.su_pass.get().strip()
-        p2 = self.su_pass2.get().strip()
-        if not user or not p1 or not p2:
+        password = self.su_pass.get().strip()
+        confirm_password = self.su_pass2.get().strip()
+        if not user or not password or not confirm_password:
             messagebox.showwarning("Missing", "Fill all fields.")
             return
-        if p1 != p2:
+        if password != confirm_password:
             messagebox.showerror("Mismatch", "Passwords do not match.")
             return
-        ok, msg = signup(user, p1)
+        ok, msg = signup(user, password)
         if ok:
             ensure_user_file(user)
-            messagebox.showinfo("Success", msg)
+            # messagebox.showinfo("Success", msg)
             # Optionally switch to login tab
             self.tabview.set("Login")
         else:
@@ -75,14 +75,14 @@ class LoginWindow(ctk.CTk):
 
     def handle_login(self):
         user = self.login_user.get().strip()
-        p = self.login_pass.get().strip()
-        if not user or not p:
+        password = self.login_pass.get().strip()
+        if not user or not password:
             messagebox.showwarning("Missing", "Fill all fields.")
             return
-        ok, msg = login(user, p)
+        ok, msg = login(user, password)
         if ok:
             ensure_user_file(user)
-            messagebox.showinfo("Welcome", msg)
+            # messagebox.showinfo("Welcome", msg)
             # Launch dashboard as new process, pass username
             python = sys.executable
             # close window first

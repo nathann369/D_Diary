@@ -1,8 +1,14 @@
 {
   "entries": [
     {
+      "title": "hoo",
+      "content": "hoo hooo hooo",
+      "date": "2025-10-27",
+      "locked": false
+    },
+    {
       "title": "test",
-      "content": "test again",
+      "content": "test again edited",
       "date": "2025-10-27",
       "locked": false
     },

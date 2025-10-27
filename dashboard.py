@@ -48,18 +48,18 @@ class Dashboard(ctk.CTk):
         ctk.CTkButton(self.left_frame, text="Delete Entry", command=self.delete_selected).pack(fill="x", padx=10, pady=6)
         ctk.CTkButton(self.left_frame, text="Lock/Unlock", command=self.lock_toggle_selected).pack(fill="x", padx=10, pady=6)
         ctk.CTkButton(self.left_frame, text="Export (PDF)", command=self.export_selected).pack(fill="x", padx=10, pady=6)
-        ctk.CTkButton(self.left_frame, text="View All Notes", command=self.refresh_list).pack(fill="x", padx=10, pady=6)
+        # ctk.CTkButton(self.left_frame, text="View All Notes", command=self.refresh_list).pack(fill="x", padx=10, pady=6)
 
         # Right top: search center + refresh + logout
         topbar = ctk.CTkFrame(self.right_frame, fg_color="transparent")
         topbar.pack(fill="x", pady=(4, 8))
 
-        self.search_entry = ctk.CTkEntry(topbar, placeholder_text="Search keyword or YYYY-MM-DD", width=420)
+        self.search_entry = ctk.CTkEntry(topbar, placeholder_text="Search keyword or YYYY-MM-DD", width=400)
         self.search_entry.pack(pady=6, side="left", padx=(120, 6))
         ctk.CTkButton(topbar, text="Search", command=self.search).pack(side="left", padx=6)
-        ctk.CTkButton(topbar, text="🔄 Refresh", command=self.refresh_list).pack(side="left", padx=6)
+        ctk.CTkButton(topbar, text="Refresh", command=self.refresh_list, fg_color="blue").pack(side="left", padx=6)
 
-        ctk.CTkButton(topbar, text="Logout", command=self.logout).pack(side="right", padx=10)
+        ctk.CTkButton(topbar, text="Logout", command=self.logout, fg_color="red").pack(side="right", padx=10)
 
         # Entries list (scrollable)
         self.list_container = ctk.CTkScrollableFrame(self.right_frame, height=300, corner_radius=8)
@@ -147,6 +147,8 @@ class Dashboard(ctk.CTk):
         popup = ctk.CTkToplevel(self)
         popup.title("Add Entry" if mode == "add" else "Edit Entry")
         popup.geometry("600x450")
+        popup.grab_set()
+        popup.focus_force()
 
         title_entry = ctk.CTkEntry(popup, placeholder_text="Title", width=520)
         title_entry.pack(pady=(12, 8))
@@ -233,14 +235,14 @@ class Dashboard(ctk.CTk):
 
     # ---------------- Search ----------------
     def search(self):
-        q = self.search_entry.get().strip()
-        if not q:
+        query = self.search_entry.get().strip()
+        if not query:
             self.refresh_list()
             return
         results = []
         # date range e.g., 2025-01-01 to 2025-01-31
-        if "to" in q:
-            parts = q.split("to")
+        if "to" in query:
+            parts = query.split("to")
             try:
                 s = parse_date(parts[0].strip())
                 e = parse_date(parts[1].strip())
@@ -257,10 +259,10 @@ class Dashboard(ctk.CTk):
                 content = ent.get("content", "")
                 if isinstance(content, dict):
                     # encrypted — cannot search inside unless unlocked
-                    if q.lower() in title.lower():
+                    if query.lower() in title.lower():
                         results.append(ent)
                 else:
-                    if q.lower() in title.lower() or q.lower() in content.lower():
+                    if query.lower() in title.lower() or query.lower() in content.lower():
                         results.append(ent)
         # show results (note: results are entries dicts)
         for w in self.list_container.winfo_children():
@@ -301,7 +303,7 @@ class Dashboard(ctk.CTk):
 
     # ---------------- Logout ----------------
     def logout(self):
-        if messagebox.askyesno("Logout", "Return to login screen?"):
+        if messagebox.askyesno("Logout", "Bye bye! Logout now?"):
             # restart login.py as new process
             python = sys.executable
             self.destroy()

@@ -121,7 +121,7 @@ class DiaryDashboard(ctk.CTk):
     def add_entry_popup(self):
         popup = ctk.CTkToplevel(self)
         popup.title("Add New Entry")
-        popup.geometry("400x400")
+        popup.geometry("600x450")
         popup.grab_set()
         popup.focus_force()
 
