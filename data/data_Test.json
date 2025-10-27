@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "title": "test",
+      "content": "test again",
+      "date": "2025-10-27",
+      "locked": false
+    },
+    {
+      "title": "test",
+      "content": "testing the tester",
+      "date": "2025-10-27",
+      "locked": false
+    }
+  ]
+}
